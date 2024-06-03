@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/contact.css">
+    <link rel="shortcut icon" href="./assets/images/Glorious.png" type="image/svg+xml">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1>Contact Us</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-container">
+                    <form method="post" name="contact-form" id="my-form" action="https://script.google.com/macros/s/AKfycbyLvFcxmizJvPBXQmbAdcytXpxxPbc1UyfelfWjRDEgnX2Hi6Z2tIWRzTNRqC2STynzhA/exec">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" required class="form-control" id="name" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="number" class="form-label">Mobile Number</label>
+                            <input type="number" required class="form-control" id="number" placeholder="Enter your mobile number">
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" required class="form-control" id="email" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea required class="form-control" id="message" placeholder="Enter your message"></textarea>
+                        </div>
+                        <button type="submit" onsubmit="data()" class="btn btn-primary" value="submit" id="submit-btn">Submit</button>
+                       
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--Announcement Script-->
+   <!--<script type="module">
+        const form = document.getElementById('my-form');
+        const submitBtn = document.getElementById('submit-btn');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Add your form submission logic here
+            console.log('Form submitted successfully!');
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Send successfully'));
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        });
+    </script>-->
+
+    <!--Contact form to google sheets-->
+   
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyAjdJIsnoue0WqxKvzjI0GjtMqM2k4jTnw",
+          authDomain: "contact-form-data-df449.firebaseapp.com",
+          projectId: "contact-form-data-df449",
+          storageBucket: "contact-form-data-df449.appspot.com",
+          messagingSenderId: "313706397627",
+          appId: "1:313706397627:web:9a15ab0f21491a23978e9e"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+      
+        // get ref to database services
+        const db = getDatabase(app);
+      
+        document.getElementById("submit-btn").addEventListener('click', function(e){
+          e.preventDefault();
+          const name = document.getElementById("name").value;
+          const number = document.getElementById("number").value;
+          const email = document.getElementById("email").value;
+          const message = document.getElementById("message").value;
+      
+        if(name==""){
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Please enter your name'));
+            alert("Please Enter Your Name")
+            return;
+        }
+        if (number==""){
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Pleaser enter your phone number'));
+            alert("Please Enter Your Phone Number")
+            return;
+        }
+          if (number.length < 10) {
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Please enter a valid phone number'));
+            alert("Please enter a valid phone number (minimum 10 digits)");
+            return;
+          }
+          if (email==""){
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Please enter your email'));
+          } 
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          if (!emailRegex.test(email)) {
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Please enter a valid email '));
+            alert("Please enter a valid email address");
+            return;
+          }
+          if(message==""){
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Please enter a message'));
+            alert("Please enter a message");
+            return;
+          }
+      
+          set(ref(db, 'user/' + name), 
+      {
+          name: name,
+          number: number,
+          email: email,
+          message: message
+      });
+      
+       // Add your form submission logic here
+       console.log('Form submitted successfully!');
+       speechSynthesis.speak(new SpeechSynthesisUtterance('Information Send successfully'));
+       alert("Your Data Has Send Successfully! Our Team Will Contact You Soon...")
+       setTimeout(() => {
+         window.location.reload();
+       }, 2000);
+      
+              });
+      
+      </script>
+
+</html>

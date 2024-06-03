@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Admission Form</title>
+    <link rel="stylesheet" href="assets/css/admission.css">
+    <link rel="shortcut icon" href="./assets/images/Glorious.png" type="image/svg+xml">
+    
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+        <div class="col-12 text-center" style="text-align: center; font-family: Arial;">
+            <h1>Online Admission</h1>
+        </div>
+    </div>
+    <div class="container">
+        <form>
+          <div class="row">
+            <div class="col-25">
+              <label for="fname">First Name</label>
+            </div>
+            <div class="col-75">
+              <input type="text" id="fname" name="firstname" placeholder="Your first name..">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="lname">Last Name</label>
+            </div>
+            <div class="col-75">
+              <input type="text" id="lname" name="lastname" placeholder="Your last name..">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="email">Email</label>
+            </div>
+            <div class="col-75">
+              <input type="email" id="email" name="email" placeholder="Your email..">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="phone">Phone Number</label>
+            </div>
+            <div class="col-75">
+              <input type="tel" id="phone" name="phone" placeholder="Your phone number..">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="address">Address</label>
+            </div>
+            <div class="col-75">
+              <textarea id="address" name="address" placeholder="Your address.." style="height:100px"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="course">Class</label>
+            </div>
+            <div class="col-75">
+              <select id="class" name="class">
+                <option value="">Select Class</option>
+                <option value="V">V</option>
+                <option value="VI">VI</option>
+                <option value="VII">VII</option>
+                <option value="VIII">VIII</option>
+                <option value="IX">IX</option>
+                <option value="X">X</option>
+                <option value="XI">XI</option>
+                <option value="XII">XII</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <button type="submit" class="btn" value="submit" id="submit-btn">Submit</button>
+          </div>
+        </form>
+      </div>
+
+
+   
+      <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyDyqalz-DM4f-_6bDkPxkbcBrabmnBS4o8",
+          authDomain: "admission-data-2f0ec.firebaseapp.com",
+          projectId: "admission-data-2f0ec",
+          storageBucket: "admission-data-2f0ec.appspot.com",
+          messagingSenderId: "260911818413",
+          appId: "1:260911818413:web:42076d31c313f41e4f0824"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+      
+        // get ref to database services
+        const db = getDatabase(app);
+      
+        document.getElementById("submit-btn").addEventListener('click', function(e){
+          e.preventDefault();
+          const fname = document.getElementById("fname").value;
+          const lname = document.getElementById("lname").value;
+          const email = document.getElementById("email").value;
+          const phone = document.getElementById("phone").value;
+          const address = document.getElementById("address").value;
+          const classVal = document.getElementById("class").value;
+      
+          if (fname === "") {
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Please enter your first name!'));
+            alert("Please enter your first name!");
+            return;
+          }
+
+          if (lname === "") {
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Please enter your last name!'));
+            alert("Please enter your last name!");
+            return;
+          }
+          
+          if (email === "") {
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Please enter your email!'));
+            alert("Please enter your email!");
+            return;
+          }
+          if (phone === "") {
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Please enter your phone number!'));
+            alert("Please enter your phone number!");
+            return;
+          }
+          if (address === "") {
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Please enter your address!'));
+            alert("Please enter your address!");
+            return;
+          }
+
+          if (classVal === "") {
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Please select your class!'));
+            alert("Please select your class!");
+            return;
+          }
+      
+          if (phone.length < 10) {
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Please enter valid phone number!'));
+            alert("Phone number must be at least 10 digits!");
+            return;
+          }
+      
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          if (!emailRegex.test(email)) {
+            speechSynthesis.speak(new SpeechSynthesisUtterance('Please enter valid email address!'));
+            alert("Invalid email address!");
+            return;
+          }
+      
+          set(ref(db, 'user/' + fname), 
+      {
+          name: fname,
+          lastname: lname,
+          email: email,
+          phone: phone,
+          address: address,
+          class: classVal
+      });
+      
+       // Add your form submission logic here
+       console.log('Form submitted successfully!');
+       speechSynthesis.speak(new SpeechSynthesisUtterance('Information Send successfully!'));
+       alert("Your Data Has Send Successfully! Our Team Will Contact You Soon...")
+       setTimeout(() => {
+       window.location.reload();
+       }, 2000);
+      
+              });
+      
+      </script>
+  
+</body>
+</html>
